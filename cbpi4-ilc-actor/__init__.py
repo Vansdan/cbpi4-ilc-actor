@@ -12,6 +12,7 @@ logger = logging.getLogger(__name__)
 
 @parameters([
     Property.Select(label="Http Method", options=['GET','POST'], description="HTTP method to use"),
+    Property.Text(label="IP ILC", configurable=True, description="IP adress ILC"),
     Property.Select(label="Check Certificate", options=['YES','NO'], description="Enable or disable TLS certificate checking. This setting has no impact for unencrypted connections"),
     Property.Number(label="Request Timeout", configurable=True, description="HTTP request timeout in seconds (default 5)", default_value=5),
     Property.Text(label="Target URL On", configurable=True, description="Target url for state on. Must include a uri scheme (https://...)"),
@@ -55,7 +56,9 @@ class ILCActor(CBPiActor):
             self.continuous_mode = True
         else:
             self.continuous_mode = False
-            
+        
+        self.ipilc = self.props.get("IP ILC")
+        
         self.url_on = self.props.get("Target URL On")
         self.url_off = self.props.get("Target URL Off")
 
