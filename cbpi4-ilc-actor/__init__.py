@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
     Property.Text(label="Actor Variable", configurable=True, description="Actor Variable in SPS", default_value="CBPI4.ILC_Actor"),
     #Property.Text(label="Actor Variable - Get", configurable=True, description="Actor Variable in SPS", default_value="MAISCHEN.RPBI_HZG"),
     ])
-class ILCActor(CBPiActor):
+class CustomActor(CBPiActor):
 
     @action("action", parameters={})
     async def action(self, **kwargs):
@@ -48,5 +48,5 @@ class ILCActor(CBPiActor):
         pass
 
 def setup(cbpi):
-    cbpi.plugin.register("ILC Actor", ILCActor)
+    cbpi.plugin.register("ILC Actor", CustomActor)
     pass
