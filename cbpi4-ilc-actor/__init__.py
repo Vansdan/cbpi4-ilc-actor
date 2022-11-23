@@ -28,7 +28,8 @@ logger = logging.getLogger(__name__)
 class ILCActor(CBPiActor):
 
     
-   @action("Toggle on off once with 5 second pause", parameters={})
+
+    @action("Toggle on off once with 5 second pause", parameters={})
     async def action(self, **kwargs):
         logger.info("Action triggered %s los" % kwargs)
         self.on()
@@ -58,13 +59,6 @@ class ILCActor(CBPiActor):
             self.continuous_mode = True
         else:
             self.continuous_mode = False
-            
-       
-            #ip_ilc = self.props.get("IP ILC")
-            #variable_ilc = self.props.get("Actor Variable")            
-            #urlilc = "http://" + ip_ilc + "/cgi-bin/writeVal.exe?" + variable_ilc + "+" + "1"
-            
-            
             
         self.url_on = self.props.get("Target URL On")
         self.url_off = self.props.get("Target URL Off")
