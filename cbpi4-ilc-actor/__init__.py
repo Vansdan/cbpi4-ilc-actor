@@ -60,8 +60,8 @@ class ILCActor(CBPiActor):
             self.continuous_mode = False
             
        
-            ip_ilc = self.props.get("IP ILC")
-            variable_ilc = self.props.get("Actor Variable")            
+            #ip_ilc = self.props.get("IP ILC")
+            #variable_ilc = self.props.get("Actor Variable")            
             #urlilc = "http://" + ip_ilc + "/cgi-bin/writeVal.exe?" + variable_ilc + "+" + "1"
             
             
