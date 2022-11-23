@@ -62,11 +62,11 @@ class ILCActor(CBPiActor):
        
             ip_ilc = self.props.get("IP ILC")
             variable_ilc = self.props.get("Actor Variable")            
-            url = "http://" + ip_ilc + "/cgi-bin/writeVal.exe?" + variable_ilc + "+" + "1"
+            urlilc = "http://" + ip_ilc + "/cgi-bin/writeVal.exe?" + variable_ilc + "+" + "1"
             
             
             
-        self.url_on = url
+        self.url_on = urlilc
         self.url_off = self.props.get("Target URL Off")
 
         self.payload_on = self.props.get("Request Body On")
