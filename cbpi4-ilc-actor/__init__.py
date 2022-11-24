@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
     Property.Text(label="IP ILC3", configurable=True, description="IP Adress of ILC SPS (example: 192.168.1.150)", default_value="192.168.1.151"),
     Property.Text(label="Actor Variable", configurable=True, description="Actor Variable in SPS", default_value="CBPI4.ILC_Actor"),
     Property.Select(label="Http Method", options=['GET','POST'], description="HTTP method to use"),
-    Property.Select(label="Check Certificate", options=['YES','NO'], description="Enable or disable TLS certificate checking. This setting has no impact for unencrypted connections"),
+    #Property.Select(label="Check Certificate", options=['YES','NO'], description="Enable or disable TLS certificate checking. This setting has no impact for unencrypted connections"),
     Property.Number(label="Request Timeout", configurable=True, description="HTTP request timeout in seconds (default 5)", default_value=5),
     Property.Text(label="Target URL On", configurable=True, description="Target url for state on. Must include a uri scheme (https://...)"),
     Property.Text(label="Request Body On", configurable=True, description="This request body is passed in the corresponding on request"),
