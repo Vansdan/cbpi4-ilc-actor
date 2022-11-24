@@ -27,7 +27,7 @@ logger = logging.getLogger(__name__)
     ])
 class ILCActor(CBPiActor):
 
-    
+#---------------------------------------------------------------------------------------------------------------      
 
     @action("Toggle on off once with 5 second pause", parameters={})
     async def action(self, **kwargs):
@@ -38,6 +38,8 @@ class ILCActor(CBPiActor):
         logger.info("Action triggered %s ende" % kwargs)
         pass
 
+#---------------------------------------------------------------------------------------------------------------      
+    
     def __init__(self, cbpi, id, props):
         super().__init__(cbpi, id, props)
         self.state = False
@@ -78,6 +80,7 @@ class ILCActor(CBPiActor):
 
         pass
 
+#---------------------------------------------------------------------------------------------------------------  
 
     async def set_continuous_state(self):
         logger.info('Starting continuous state setter background task interval=%s'% self.continuous_interval)
@@ -96,6 +99,8 @@ class ILCActor(CBPiActor):
 
         pass
 
+#---------------------------------------------------------------------------------------------------------------      
+    
     async def start_request(self, onoff):
         if onoff:
             url = self.url_on
@@ -122,41 +127,56 @@ class ILCActor(CBPiActor):
 
         logger.info("HTTPActor type=request_done onoff=%s url=\"%s\" http_statuscode=%s response_text=\"%s\"" % (onoff, url, response.status_code, response.text.replace('"', '\\"')))
 
+ #---------------------------------------------------------------------------------------------------------------  
 
     async def on(self, power=0):
         logger.debug("Actor %s ON" % self.id)
         self.state = True
         await self.start_request(True)
 
+#---------------------------------------------------------------------------------------------------------------       
+        
     async def off(self):
         logger.debug("Actor %s OFF" % self.id)
         self.state = False
         await self.start_request(False)
 
+#---------------------------------------------------------------------------------------------------------------  
+        
     def get_state(self):
         return self.state
 
+#---------------------------------------------------------------------------------------------------------------  
+    
     async def start(self):
         pass
 
+#---------------------------------------------------------------------------------------------------------------  
+    
     async def stop(self):
         if self.continuous_task is not None:
             self.continuous_task.cancel()
 
         pass
-
+#---------------------------------------------------------------------------------------------------------------  
+    
     async def on_start(self):
         pass
-
+    
+#---------------------------------------------------------------------------------------------------------------  
+   
     async def on_stop(self):
         pass
 
+#---------------------------------------------------------------------------------------------------------------  
     
     async def run(self):
         if self.continuous_mode:
             self.continuous_task = asyncio.create_task(self.set_continuous_state())
         pass
-        
+
+#---------------------------------------------------------------------------------------------------------------    
+    
 def setup(cbpi):
     cbpi.plugin.register("ILC Actor", ILCActor)
     pass
