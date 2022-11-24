@@ -11,7 +11,7 @@ import time
 logger = logging.getLogger(__name__)
 
 @parameters([
-    Property.Text(label="IP ILC2", configurable=True, description="IP Adress of ILC SPS (example: 192.168.1.150)", default_value="192.168.1.151"),
+    Property.Text(label="IP ILC3", configurable=True, description="IP Adress of ILC SPS (example: 192.168.1.150)", default_value="192.168.1.151"),
     Property.Text(label="Actor Variable", configurable=True, description="Actor Variable in SPS", default_value="CBPI4.ILC_Actor"),
     Property.Select(label="Http Method", options=['GET','POST'], description="HTTP method to use"),
     Property.Select(label="Check Certificate", options=['YES','NO'], description="Enable or disable TLS certificate checking. This setting has no impact for unencrypted connections"),
@@ -47,9 +47,9 @@ class ILCActor(CBPiActor):
 
         self.request_session = requests.Session()
 
-        if self.props.get("Check Certificate", "YES") == "YES":
-            self.request_session.verify = True
-        else:
+        #if self.props.get("Check Certificate", "YES") == "YES":
+        #    self.request_session.verify = True
+        #else:
             self.request_session.verify = False
 
         if self.props.get("Http Method", "GET") == "GET":
