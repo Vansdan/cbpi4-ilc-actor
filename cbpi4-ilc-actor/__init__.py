@@ -13,15 +13,15 @@ logger = logging.getLogger(__name__)
 @parameters([
     Property.Text(label="IP ILC", configurable=True, description="IP Adress of ILC SPS (example: 192.168.1.150)", default_value="192.168.1.151"),
     Property.Text(label="Actor Variable", configurable=True, description="Actor Variable in SPS", default_value="CBPI4.ILC_Actor"),
-    #Property.Select(label="Http Method", options=['GET','POST'], description="HTTP method to use"),
-    #Property.Select(label="Check Certificate", options=['YES','NO'], description="Enable or disable TLS certificate checking. This setting has no impact for unencrypted connections"),
+    Property.Select(label="Http Method", options=['GET','POST'], description="HTTP method to use"),
+    Property.Select(label="Check Certificate", options=['YES','NO'], description="Enable or disable TLS certificate checking. This setting has no impact for unencrypted connections"),
     Property.Number(label="Request Timeout", configurable=True, description="HTTP request timeout in seconds (default 5)", default_value=5),
     Property.Text(label="Target URL On", configurable=True, description="Target url for state on. Must include a uri scheme (https://...)"),
     Property.Text(label="Request Body On", configurable=True, description="This request body is passed in the corresponding on request"),
     Property.Text(label="Target URL Off", configurable=True, description="Target url for state off. Must include a uri scheme (https://...)"),
     Property.Text(label="Request Body Off", configurable=True, description="This request body is passed in the corresponding off request"),
-    #Property.Text(label="Basic Authentication Username", configurable=True, description="Username used for basic authentication"),
-    #Property.Text(label="Basic Authentication Password", configurable=True, description="Password used for basic authentication"),
+    Property.Text(label="Basic Authentication Username", configurable=True, description="Username used for basic authentication"),
+    Property.Text(label="Basic Authentication Password", configurable=True, description="Password used for basic authentication"),
     Property.Select(label="Continuous Mode", options=['YES','NO'], description="Enable this if the remote url should be refreshed periodically even if our local actor state hasn't changed"),
     Property.Number(label="Continuous Interval", configurable=True, description="Refresh interval in seconds used in continuous mode")
     ])
@@ -45,15 +45,15 @@ class ILCActor(CBPiActor):
 
         self.request_session = requests.Session()
 
-        #if self.props.get("Check Certificate", "YES") == "YES":
-        #    self.request_session.verify = True
-        #else:
+        if self.props.get("Check Certificate", "YES") == "YES":
+            self.request_session.verify = True
+        else:
             self.request_session.verify = False
 
-        #if self.props.get("Http Method", "GET") == "GET":
+        if self.props.get("Http Method", "GET") == "GET":
             self.httpmethod_get = True
-        #else:
-        #    self.httpmethod_get = False
+        else:
+            self.httpmethod_get = False
     
         if self.props.get("Continuous Mode", "NO") == "YES":
             self.continuous_mode = True
@@ -67,9 +67,9 @@ class ILCActor(CBPiActor):
         self.payload_off = self.props.get("Request Body Off")
 
         self.basic_auth = None
-        #if self.props.get("Basic Authentication Username","") != "":
-        #    self.basic_auth = HTTPBasicAuth(self.props.get("Basic Authentication Username",""),
-        #                                    self.props.get("Basic Authentication Password",""))
+        if self.props.get("Basic Authentication Username","") != "":
+            self.basic_auth = HTTPBasicAuth(self.props.get("Basic Authentication Username",""),
+                                            self.props.get("Basic Authentication Password",""))
 
         self.continuous_interval = float(self.props.get("Continuous Interval", 5))
 
