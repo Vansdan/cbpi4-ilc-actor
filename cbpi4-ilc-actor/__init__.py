@@ -75,8 +75,8 @@ class ILCActor(CBPiActor):
         self.url_on = self.props.get("Target URL On")
         self.url_off = self.props.get("Target URL Off")
 
-        self.payload_on = self.props.get("Request Body On")
-        self.payload_off = self.props.get("Request Body Off")
+        self.payload_on = None
+        self.payload_off = None
 
         self.basic_auth = None
         #if self.props.get("Basic Authentication Username", "") != "":
