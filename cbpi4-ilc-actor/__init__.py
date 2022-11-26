@@ -71,7 +71,13 @@ class ILCActor(CBPiActor):
         #   self.continuous_mode = True
         #else:
         self.continuous_mode = False
-
+        
+        #http://192.168.1.152/cgi-bin/writeVal.exe?WOHNEN.WOH_LICHT_COUCHV+1
+        
+        self.variable_ilc = self.props.get("Actor Variable")
+        self.ip_ilc = self.props.get("IP ILC")
+        self.url_on_ilc = "http://" + self.ip_ilc + "/cgi-bin/writeVal.exe?" + self.variable_ilc + "+" + "1"
+        
         self.url_on = self.props.get("Target URL On")
         self.url_off = self.props.get("Target URL Off")
 
