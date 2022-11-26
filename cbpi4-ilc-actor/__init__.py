@@ -76,10 +76,12 @@ class ILCActor(CBPiActor):
         
         self.variable_ilc = self.props.get("Actor Variable")
         self.ip_ilc = self.props.get("IP ILC")
-        self.url_on_ilc = "http://" + self.ip_ilc + "/cgi-bin/writeVal.exe?" + self.variable_ilc + "+" + "1"
         
-        self.url_on = self.props.get("Target URL On")
-        self.url_off = self.props.get("Target URL Off")
+        self.url_on = "http://" + self.ip_ilc + "/cgi-bin/writeVal.exe?" + self.variable_ilc + "+" + "1"
+        self.url_off = "http://" + self.ip_ilc + "/cgi-bin/writeVal.exe?" + self.variable_ilc + "+" + "0"
+        
+        #self.url_on = self.props.get("Target URL On")
+        #self.url_off = self.props.get("Target URL Off")
 
         self.payload_on = None
         self.payload_off = None
