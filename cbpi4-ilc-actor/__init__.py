@@ -55,7 +55,8 @@ class ILCActor(CBPiActor):
         
         self.url_on = "http://" + self.ip_ilc + "/cgi-bin/writeVal.exe?" + self.variable_ilc + "+" + "1"
         self.url_off = "http://" + self.ip_ilc + "/cgi-bin/writeVal.exe?" + self.variable_ilc + "+" + "0"
-
+        
+        #url = "http://" + ip_ilc + "/cgi-bin/readVal.exe?" + variable_ilc
         self.url_read = "http://" + self.ip_ilc + "/cgi-bin/readVal.exe?" + self.variable_ilc
         
         #self.url_on = self.props.get("Target URL On")
@@ -108,14 +109,14 @@ class ILCActor(CBPiActor):
         else:
             basic_auth_logtext = "[not set]"
 
-        logger.info("HTTPActor type=request_start onoff=%s url=\"%s\" payload=\"%s\" method_getpost=%s user=%s" % (
+        logger.info("ILCActor type=request_start onoff=%s url=\"%s\" payload=\"%s\" method_getpost=%s user=%s" % (
         onoff, url, payload_logtext, self.httpmethod_get, basic_auth_logtext))
         if self.httpmethod_get:
             response = self.request_session.get(url, data=payload, auth=self.basic_auth)
         else:
             response = self.request_session.post(url, data=payload, auth=self.basic_auth)
 
-        logger.info("HTTPActor type=request_done onoff=%s url=\"%s\" http_statuscode=%s response_text=\"%s\"" % (
+        logger.info("ILCActor type=request_done onoff=%s url=\"%s\" http_statuscode=%s response_text=\"%s\"" % (
         onoff, url, response.status_code, response.text.replace('"', '\\"')))
 
     async def on(self, power=0):
