@@ -120,6 +120,11 @@ class ILCActor(CBPiActor):
 
         logger.info("HTTPActor type=request_done onoff=%s url=\"%s\" http_statuscode=%s response_text=\"%s\"" % (onoff, url, response.status_code, response.text.replace('"', '\\"')))
 
+    async def status_request(self):
+        url_read = self.url_read        
+        read = self.request_session.get(url_read)
+        value_read = read.text
+        logger.info("onoff=%s" % (value_read))
 
     async def on(self, power=0):
         logger.debug("Actor %s ON" % self.id)
