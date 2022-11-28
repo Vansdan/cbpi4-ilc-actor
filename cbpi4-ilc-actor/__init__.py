@@ -1,4 +1,3 @@
-
 import os
 from aiohttp import web
 import logging
@@ -83,7 +82,6 @@ class ILCActor(CBPiActor):
             start_time = int(time.time())
             try:
                 await self.start_request(self.state)
-                #await self.ilc_request(self.state)
             except Exception as e:
                 logger.error("Unknown exception: %s" % e)
 
@@ -96,12 +94,13 @@ class ILCActor(CBPiActor):
 
         pass
 
-    
- 
-   
 
     async def start_request(self, onoff):
-       
+
+        #url_read = self.url_read        
+        #read = self.request_session.get(url_read)
+        #value_read = read.text
+        
         if onoff:
             url = self.url_on
             payload = self.payload_on               
