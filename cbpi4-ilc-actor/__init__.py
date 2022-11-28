@@ -82,7 +82,8 @@ class ILCActor(CBPiActor):
         while True:
             start_time = int(time.time())
             try:
-                await self.start_request(self.state)
+                #await self.start_request(self.state)
+                await self.ilc_request(self)
             except Exception as e:
                 logger.error("Unknown exception: %s" % e)
 
@@ -95,17 +96,26 @@ class ILCActor(CBPiActor):
 
         pass
 
-    async def start_request(self, onoff):
-        if onoff:
-            url_read = self.url_read        
-            read = self.request_session.get(url_read)
-            value_read = read.text
-            url = self.url_on
-            payload = self.payload_on
+    
+ 
+    async def ilc_request(self):           
+        
+        url_read = self.url_read        
+        read = self.request_session.get(url_read)
+        value_read = read.text
+        if value_read == "1":
+            self.state = True
         else:
-            url_read = self.url_read        
-            read = self.request_session.get(url_read)
-            value_read = read.text
+            self.state = False
+        pass   
+            
+
+    async def start_request(self, onoff):
+       
+        if onoff:
+            url = self.url_on
+            payload = self.payload_on               
+        else:
             url = self.url_off
             payload = self.payload_off
 
