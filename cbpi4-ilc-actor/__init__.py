@@ -156,7 +156,8 @@ class ILCActor(CBPiActor):
 
     async def run(self):
         if self.continuous_mode:
-            self.continuous_task = asyncio.create_task(self.set_continuous_state())
+            #self.continuous_task = asyncio.create_task(self.set_continuous_state())
+            self.continuous_task = asyncio.create_task(self.status_request())
         pass
 
 
