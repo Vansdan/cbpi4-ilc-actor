@@ -93,9 +93,8 @@ class ILCActor(CBPiActor):
 
     async def start_request(self, onoff):
         if onoff:
-            url_read = self.url_read        
-            read = self.request_session.get(url_read)
-            
+            #url_read = self.url_read        
+            #read = self.request_session.get(url_read)
             url = self.url_on
             payload = self.payload_on
         else:
