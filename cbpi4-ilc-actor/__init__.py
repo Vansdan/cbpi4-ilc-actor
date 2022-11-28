@@ -99,10 +99,13 @@ class ILCActor(CBPiActor):
         if onoff:
             url_read = self.url_read        
             read = self.request_session.get(url_read)
-            #value_read = read.text
+            value_read = read.text
             url = self.url_on
             payload = self.payload_on
         else:
+            url_read = self.url_read        
+            read = self.request_session.get(url_read)
+            value_read = read.text
             url = self.url_off
             payload = self.payload_off
 
@@ -116,8 +119,8 @@ class ILCActor(CBPiActor):
         else:
             basic_auth_logtext = "[not set]"
 
-        logger.info("ILCActor type=request_start onoff=%s url=\"%s\" payload=\"%s\" method_getpost=%s user=%s" % (
-        onoff, url, payload_logtext, self.httpmethod_get, basic_auth_logtext))
+        logger.info("ILCActor type=request_start onoff=%s url=\"%s\" value_read=\"%s\" method_getpost=%s user=%s" % (
+        onoff, url, value_read, self.httpmethod_get, basic_auth_logtext))
         if self.httpmethod_get:
             response = self.request_session.get(url, data=payload, auth=self.basic_auth)
         else:
