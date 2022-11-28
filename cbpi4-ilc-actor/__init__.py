@@ -94,39 +94,32 @@ class ILCActor(CBPiActor):
 
         pass
 
-
     async def start_request(self, onoff):
-
-        #url_read = self.url_read        
-        #read = self.request_session.get(url_read)
-        #value_read = read.text
-        
         if onoff:
             url = self.url_on
-            payload = self.payload_on               
+            payload = self.payload_on
         else:
             url = self.url_off
             payload = self.payload_off
 
         if payload is not None:
-            payload_logtext = payload.replace('"', '\\"')
+            payload_logtext=payload.replace('"', '\\"')
         else:
-            payload_logtext = "[not_set]"
+            payload_logtext="[not_set]"
 
         if self.basic_auth is not None:
             basic_auth_logtext = self.basic_auth.username
         else:
             basic_auth_logtext = "[not set]"
 
-        logger.info("ILCActor type=request_start onoff=%s url=\"%s\" value_read=\"%s\" method_getpost=%s user=%s" % (
-        onoff, url, value_read, self.httpmethod_get, basic_auth_logtext))
+        logger.info("HTTPActor type=request_start onoff=%s url=\"%s\" payload=\"%s\" method_getpost=%s user=%s" % (onoff, url, payload_logtext, self.httpmethod_get, basic_auth_logtext))
         if self.httpmethod_get:
             response = self.request_session.get(url, data=payload, auth=self.basic_auth)
         else:
             response = self.request_session.post(url, data=payload, auth=self.basic_auth)
 
-        logger.info("ILCActor type=request_done onoff=%s url=\"%s\" http_statuscode=%s response_text=\"%s\"" % (
-        onoff, url, response.status_code, response.text.replace('"', '\\"')))
+        logger.info("HTTPActor type=request_done onoff=%s url=\"%s\" http_statuscode=%s response_text=\"%s\"" % (onoff, url, response.status_code, response.text.replace('"', '\\"')))
+
 
     async def on(self, power=0):
         logger.debug("Actor %s ON" % self.id)
