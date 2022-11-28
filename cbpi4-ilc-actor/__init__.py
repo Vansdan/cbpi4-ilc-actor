@@ -124,7 +124,7 @@ class ILCActor(CBPiActor):
         url_read = self.url_read        
         read = self.request_session.get(url_read)
         value_read = read.text
-        if value_read = "0":
+        if value_read == "0":
             self.state = False
         else:
             self.state = True
