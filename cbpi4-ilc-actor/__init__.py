@@ -45,7 +45,11 @@ class ILCActor(CBPiActor):
         self.request_session = requests.Session()
         self.request_session.verify = False
         self.httpmethod_get = True
-        self.continuous_mode = False
+        
+        if self.props.get("Continuous Mode", "NO") == "YES":
+            self.continuous_mode = True
+        else:
+            self.continuous_mode = False
         
         #http://192.168.1.152/cgi-bin/writeVal.exe?WOHNEN.WOH_LICHT_COUCHV+1
         
