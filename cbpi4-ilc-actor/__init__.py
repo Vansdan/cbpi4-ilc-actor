@@ -95,6 +95,18 @@ class ILCActor(CBPiActor):
 
         pass
 
+    async def status_request(self):
+        url_read = self.url_read        
+        read = self.request_session.get(url_read)
+        value_read = read.text
+        if value_read == "0":
+            self.state = False
+        if value_read == "1":
+            self.state = True
+        logger.info("value_read = %s" % (value_read))
+    
+    
+    
     async def start_request(self, onoff):
         if onoff:
             url = self.url_on
@@ -120,16 +132,6 @@ class ILCActor(CBPiActor):
             response = self.request_session.post(url, data=payload, auth=self.basic_auth)
 
         logger.info("HTTPActor type=request_done onoff=%s url=\"%s\" http_statuscode=%s response_text=\"%s\"" % (onoff, url, response.status_code, response.text.replace('"', '\\"')))
-
-    async def status_request(self):
-        url_read = self.url_read        
-        read = self.request_session.get(url_read)
-        value_read = read.text
-        if value_read == "0":
-            self.state = False
-        else:
-            self.state = True
-        logger.info("value_read = %s" % (value_read))
 
     async def on(self, power=0):
         logger.debug("Actor %s ON" % self.id)
