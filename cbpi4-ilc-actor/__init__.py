@@ -81,7 +81,8 @@ class ILCActor(CBPiActor):
         while True:
             start_time = int(time.time())
             try:
-                await self.start_request(self.state)
+                #await self.start_request(self.state)
+                await self.status_request()
             except Exception as e:
                 logger.error("Unknown exception: %s" % e)
 
