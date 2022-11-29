@@ -74,19 +74,17 @@ class ILCActor(CBPiActor):
     #Funktion set continous state-----------------------------------------------------------------------------------
 
     async def set_continuous_state(self):
-        logger.info('Starting continuous state setter background task interval=%s' % self.continuous_interval)
+        logger.info('Starting continuous state setter background task interval=%s'% self.continuous_interval)
         while True:
             start_time = int(time.time())
             try:
                 await self.start_request(self.state)
-                #await self.status_request()
             except Exception as e:
                 logger.error("Unknown exception: %s" % e)
-
+            
             wait_time = start_time + self.continous_interval - int(time.time())
             if wait_time < 0:
-                logger.warn(
-                    "Continuous interval kann nicht gehalten werden, da zu klein und requests brauchen zu lange")
+                logger.warn("Continuous interval kann nicht gehalten werden, da zu klein und requests brauchen zu lange")
             else:
                 await asyncio.sleep(wait_time)
 
@@ -155,7 +153,6 @@ class ILCActor(CBPiActor):
     async def run(self):
         if self.continuous_mode:
             self.continuous_task = asyncio.create_task(self.set_continuous_state())
-            #self.continuous_task = asyncio.create_task(self.status_request())
         pass
 
 #Definitionsende----------------------------------------------------------------------------------------------------
