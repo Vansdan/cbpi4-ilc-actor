@@ -129,7 +129,7 @@ class ILCActor(CBPiActor):
             self.state = False
         else:
             self.state = True
-        logger.info("onoff=%s" % (value_read))
+        logger.info("value_read = %s" % (value_read))
 
     async def on(self, power=0):
         logger.debug("Actor %s ON" % self.id)
