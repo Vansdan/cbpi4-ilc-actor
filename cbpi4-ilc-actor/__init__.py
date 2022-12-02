@@ -68,7 +68,7 @@ class ILCActor(CBPiActor):
         self.url_off = "http://" + self.ip_ilc + "/cgi-bin/writeVal.exe?" + self.variable_ilc + "+" + "0"
         
         #url = "http://" + ip_ilc + "/cgi-bin/readVal.exe?" + variable_ilc
-        self.url_read = "http://" + self.ip_ilc + "/cgi-bin/readVal.exe?" + self.variable_ilc
+        self.url_read = "http://" + self.ip_ilc + "/cgi-bin/readVal.exe?" + self.variable_ilc_read
 
         self.payload_on = None
         self.payload_off = None
