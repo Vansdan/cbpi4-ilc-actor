@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Nov 29 13:10:51 2022
+
+@author: danie
+"""
+
 import os
 from aiohttp import web
 import logging
@@ -68,24 +75,25 @@ class ILCActor(CBPiActor):
         self.basic_auth = None
         self.continuous_interval = float(self.props.get("Continuous Interval", 5))
         self.request_session.timeout = float(self.props.get("Request Timeout", 5))
-        self.req_type = read
-        
+
         pass
 
     #Funktion set continous state-----------------------------------------------------------------------------------
 
     async def set_continuous_state(self):
-        logger.info('Starting continuous state setter background task interval=%s'% self.continuous_interval)
+        logger.info('Starting continuous state setter background task interval=%s' % self.continuous_interval)
         while True:
             start_time = int(time.time())
             try:
-                await self.start_request(req_type)
+                await self.start_request(self.state)
+                #await self.status_request()
             except Exception as e:
                 logger.error("Unknown exception: %s" % e)
-            
+
             wait_time = start_time + self.continous_interval - int(time.time())
             if wait_time < 0:
-                logger.warn("Continuous interval kann nicht gehalten werden, da zu klein und requests brauchen zu lange")
+                logger.warn(
+                    "Continuous interval kann nicht gehalten werden, da zu klein und requests brauchen zu lange")
             else:
                 await asyncio.sleep(wait_time)
 
@@ -93,16 +101,14 @@ class ILCActor(CBPiActor):
 
     #Funktion starte Request---------------------------------------------------------------------------------------
     
-    async def start_request(self, req_type):
-        if ein:
+    async def start_request(self, onoff):
+        if onoff:
             url = self.url_on
             payload = self.payload_on
-        if aus:
+        else:
             url = self.url_off
             payload = self.payload_off
-        if read:
-            url = self.url_read
-            payload = self.payload_off
+
         logger.info("ILCActor type=request_start onoff=%s url=\"%s\"" % (onoff, url))
 
         response = self.request_session.get(url, data=payload, auth=self.basic_auth)
@@ -114,14 +120,14 @@ class ILCActor(CBPiActor):
     async def on(self, power=0):
         logger.debug("Actor %s ON" % self.id)
         self.state = True
-        await self.start_request(ein)
+        await self.start_request(True)
 
     #Funktion off--------------------------------------------------------------------------------------------------
 
     async def off(self):
         logger.debug("Actor %s OFF" % self.id)
         self.state = False
-        await self.start_request(aus)
+        await self.start_request(False)
 
     #Funktion get_state--------------------------------------------------------------------------------------------
 
@@ -156,6 +162,7 @@ class ILCActor(CBPiActor):
     async def run(self):
         if self.continuous_mode:
             self.continuous_task = asyncio.create_task(self.set_continuous_state())
+            #self.continuous_task = asyncio.create_task(self.status_request())
         pass
 
 #Definitionsende----------------------------------------------------------------------------------------------------
@@ -163,3 +170,4 @@ class ILCActor(CBPiActor):
 def setup(cbpi):
     cbpi.plugin.register("ILC Actor", ILCActor)
     pass
+
