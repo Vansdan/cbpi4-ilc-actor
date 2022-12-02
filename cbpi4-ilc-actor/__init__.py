@@ -164,7 +164,6 @@ class ILCActor(CBPiActor):
                     self.state = False
                 else:
                     self.state = True
-                    
                 await asyncio.sleep(5)
             else:
                 await asyncio.sleep(1)
