@@ -68,7 +68,8 @@ class ILCActor(CBPiActor):
         self.basic_auth = None
         self.continuous_interval = float(self.props.get("Continuous Interval", 5))
         self.request_session.timeout = float(self.props.get("Request Timeout", 5))
-
+        self.req_type = read
+        
         pass
 
     #Funktion set continous state-----------------------------------------------------------------------------------
@@ -78,7 +79,7 @@ class ILCActor(CBPiActor):
         while True:
             start_time = int(time.time())
             try:
-                await self.start_request(self.state)
+                await self.start_request(req_type)
             except Exception as e:
                 logger.error("Unknown exception: %s" % e)
             
@@ -92,14 +93,16 @@ class ILCActor(CBPiActor):
 
     #Funktion starte Request---------------------------------------------------------------------------------------
     
-    async def start_request(self, onoff):
-        if onoff:
+    async def start_request(self, req_type):
+        if ein:
             url = self.url_on
             payload = self.payload_on
-        else:
+        if aus:
             url = self.url_off
             payload = self.payload_off
-
+        if read:
+            url = self.url_read
+            payload = self.payload_off
         logger.info("ILCActor type=request_start onoff=%s url=\"%s\"" % (onoff, url))
 
         response = self.request_session.get(url, data=payload, auth=self.basic_auth)
@@ -111,14 +114,14 @@ class ILCActor(CBPiActor):
     async def on(self, power=0):
         logger.debug("Actor %s ON" % self.id)
         self.state = True
-        await self.start_request(True)
+        await self.start_request(ein)
 
     #Funktion off--------------------------------------------------------------------------------------------------
 
     async def off(self):
         logger.debug("Actor %s OFF" % self.id)
         self.state = False
-        await self.start_request(False)
+        await self.start_request(aus)
 
     #Funktion get_state--------------------------------------------------------------------------------------------
 
