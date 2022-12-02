@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Tue Nov 29 13:10:51 2022
+Created on Fri Dec  2 08:37:22 2022
 
 @author: danie
 """
@@ -75,25 +75,24 @@ class ILCActor(CBPiActor):
         self.basic_auth = None
         self.continuous_interval = float(self.props.get("Continuous Interval", 5))
         self.request_session.timeout = float(self.props.get("Request Timeout", 5))
-
+        self.req_type = "read"
+        
         pass
 
     #Funktion set continous state-----------------------------------------------------------------------------------
 
     async def set_continuous_state(self):
-        logger.info('Starting continuous state setter background task interval=%s' % self.continuous_interval)
+        logger.info('Starting continuous state setter background task interval=%s'% self.continuous_interval)
         while True:
             start_time = int(time.time())
             try:
-                await self.start_request(self.state)
-                #await self.status_request()
+                await self.start_request(self.req_type)
             except Exception as e:
                 logger.error("Unknown exception: %s" % e)
-
+            
             wait_time = start_time + self.continous_interval - int(time.time())
             if wait_time < 0:
-                logger.warn(
-                    "Continuous interval kann nicht gehalten werden, da zu klein und requests brauchen zu lange")
+                logger.warn("Continuous interval kann nicht gehalten werden, da zu klein und requests brauchen zu lange")
             else:
                 await asyncio.sleep(wait_time)
 
@@ -101,33 +100,35 @@ class ILCActor(CBPiActor):
 
     #Funktion starte Request---------------------------------------------------------------------------------------
     
-    async def start_request(self, onoff):
-        if onoff:
+    async def start_request(self, req_type):
+        if req_type == "ein":
             url = self.url_on
             payload = self.payload_on
-        else:
+        if req_type == "aus":
             url = self.url_off
             payload = self.payload_off
-
-        logger.info("ILCActor type=request_start onoff=%s url=\"%s\"" % (onoff, url))
+        if req_type == "read":
+            url = self.url_read
+            payload = self.payload_off
+        logger.info("ILCActor type=request_start onoff=%s url=\"%s\"" % (req_type, url))
 
         response = self.request_session.get(url, data=payload, auth=self.basic_auth)
 
-        logger.info("ILCActor type=request_done onoff=%s url=\"%s\" http_statuscode=%s response_text=\"%s\"" % (onoff, url, response.status_code, response.text.replace('"', '\\"')))
+        logger.info("ILCActor type=request_done onoff=%s url=\"%s\" http_statuscode=%s response_text=\"%s\"" % (req_type, url, response.status_code, response.text.replace('"', '\\"')))
 
     #Funktion on---------------------------------------------------------------------------------------------------
 
     async def on(self, power=0):
         logger.debug("Actor %s ON" % self.id)
         self.state = True
-        await self.start_request(True)
+        await self.start_request("ein")
 
     #Funktion off--------------------------------------------------------------------------------------------------
 
     async def off(self):
         logger.debug("Actor %s OFF" % self.id)
         self.state = False
-        await self.start_request(False)
+        await self.start_request("aus")
 
     #Funktion get_state--------------------------------------------------------------------------------------------
 
@@ -156,6 +157,19 @@ class ILCActor(CBPiActor):
 
     async def on_stop(self):
         pass
+
+    #Funktion run--------------------------------------------------------------------------------------------------
+
+    async def run(self):
+        if self.continuous_mode:
+            self.continuous_task = asyncio.create_task(self.set_continuous_state())
+        pass
+
+#Definitionsende----------------------------------------------------------------------------------------------------
+    
+def setup(cbpi):
+    cbpi.plugin.register("ILC Actor", ILCActor)
+    pass
 
     #Funktion run--------------------------------------------------------------------------------------------------
 
