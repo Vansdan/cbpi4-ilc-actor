@@ -106,7 +106,11 @@ class ILCActor(CBPiActor):
         logger.info("ILCActor type=request_start onoff=%s url=\"%s\"" % (req_type, url))
 
         response = self.request_session.get(url, data=payload, auth=self.basic_auth)
-
+            if response.text == "0" and req_type == "read":
+                self.state = False
+            if response.text == "1" and req_type == "read":
+                self.state = True
+        
         logger.info("ILCActor type=request_done onoff=%s url=\"%s\" http_statuscode=%s response_text=\"%s\"" % (req_type, url, response.status_code, response.text.replace('"', '\\"')))
 
     #Funktion on---------------------------------------------------------------------------------------------------
