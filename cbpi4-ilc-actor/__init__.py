@@ -46,10 +46,10 @@ class ILCActor(CBPiActor):
         self.request_session = requests.Session()
         self.request_session.verify = False
         
-        #if self.props.get("Continuous Mode", "NO") == "YES":
-        self.continuous_mode = True
-        #else:
-        #    self.continuous_mode = False
+        if self.props.get("Continuous Mode", "NO") == "YES":
+            self.continuous_mode = True
+        else:
+            self.continuous_mode = False
         
         #http://192.168.1.152/cgi-bin/writeVal.exe?WOHNEN.WOH_LICHT_COUCHV+1
         
@@ -135,11 +135,11 @@ class ILCActor(CBPiActor):
 
     #Funktion stop-------------------------------------------------------------------------------------------------
 
-    async def stop(self):
-        if self.continuous_task is not None:
-            self.continuous_task.cancel()
+    #async def stop(self):
+    #    if self.continuous_task is not None:
+    #        self.continuous_task.cancel()
 
-        pass
+    #    pass
 
     #Funktion on_start---------------------------------------------------------------------------------------------
 
@@ -154,9 +154,15 @@ class ILCActor(CBPiActor):
     #Funktion run--------------------------------------------------------------------------------------------------
 
     async def run(self):
-        if self.continuous_mode:
-            self.continuous_task = asyncio.create_task(self.set_continuous_state())
+        while self.running is True:
+            if self.continuous_mode is True:
+                self.start_request("read")
+                logger.info("Read from SPS")
+                await asyncio.sleep(5)
+            else:
+                await asyncio.sleep(1)
         pass
+ 
 
 #Definitionsende----------------------------------------------------------------------------------------------------
     
