@@ -170,18 +170,3 @@ class ILCActor(CBPiActor):
 def setup(cbpi):
     cbpi.plugin.register("ILC Actor", ILCActor)
     pass
-
-    #Funktion run--------------------------------------------------------------------------------------------------
-
-    async def run(self):
-        if self.continuous_mode:
-            self.continuous_task = asyncio.create_task(self.set_continuous_state())
-            #self.continuous_task = asyncio.create_task(self.status_request())
-        pass
-
-#Definitionsende----------------------------------------------------------------------------------------------------
-    
-def setup(cbpi):
-    cbpi.plugin.register("ILC Actor", ILCActor)
-    pass
-
