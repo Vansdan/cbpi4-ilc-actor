@@ -69,6 +69,7 @@ class ILCActor(CBPiActor):
         self.continuous_interval = float(self.props.get("Continuous Interval", 5))
         self.request_session.timeout = float(self.props.get("Request Timeout", 5))
         self.req_type = "read"
+        self.stat_actor =""
         
         pass
 
@@ -106,6 +107,7 @@ class ILCActor(CBPiActor):
         logger.info("ILCActor type=request_start onoff=%s url=\"%s\"" % (req_type, url))
 
         response = self.request_session.get(url, data=payload, auth=self.basic_auth)
+        self.stat_actor = response.text
         
         logger.info("ILCActor type=request_done onoff=%s url=\"%s\" http_statuscode=%s response_text=\"%s\"" % (req_type, url, response.status_code, response.text.replace('"', '\\"')))
 
