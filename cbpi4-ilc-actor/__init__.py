@@ -117,6 +117,7 @@ class ILCActor(CBPiActor):
         logger.debug("Actor %s ON" % self.id)
         self.state = True
         await self.start_request("ein")
+        await asyncio.sleep(0.5)
         await self.start_request("aus")
         
     #Funktion off--------------------------------------------------------------------------------------------------
@@ -125,6 +126,7 @@ class ILCActor(CBPiActor):
         logger.debug("Actor %s OFF" % self.id)
         self.state = False
         await self.start_request("ein")
+        await asyncio.sleep(0.5)
         await self.start_request("aus")
         
     #Funktion get_state--------------------------------------------------------------------------------------------
