@@ -115,15 +115,15 @@ class ILCActor(CBPiActor):
 
     async def on(self, power=0):
         logger.debug("Actor %s ON" % self.id)
-        await self.start_request("ein")
         self.state = True
+        await self.start_request("ein")
         
     #Funktion off--------------------------------------------------------------------------------------------------
 
     async def off(self):
         logger.debug("Actor %s OFF" % self.id)
-        await self.start_request("aus")
         self.state = False
+        await self.start_request("aus")
         
     #Funktion get_state--------------------------------------------------------------------------------------------
 
