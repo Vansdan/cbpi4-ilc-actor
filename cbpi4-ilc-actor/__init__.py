@@ -159,13 +159,15 @@ class ILCActor(CBPiActor):
         while self.running is True:
             if self.continuous_mode is True:
                 await self.start_request("read")
-                logger.info("Read from SPS {}".format(self.stat_actor))
+
                 if self.stat_actor == "0":
                     self.state = False
-
+                    logger.info("Read from SPS {}".format(self.stat_actor))
+                    logger.info("Status self.state: {}".format(self.state))
                 else:
                     self.state = True
-
+                    logger.info("Read from SPS {}".format(self.stat_actor))
+                    logger.info("Status self.state: {}".format(self.state))
                 await asyncio.sleep(5)
             else:
                 await asyncio.sleep(1)
