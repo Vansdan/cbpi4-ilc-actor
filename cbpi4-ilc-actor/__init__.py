@@ -115,16 +115,16 @@ class ILCActor(CBPiActor):
 
     async def on(self, power=0):
         logger.debug("Actor %s ON" % self.id)
-        self.state = True
         await self.start_request("ein")
-
+        self.state = True
+        
     #Funktion off--------------------------------------------------------------------------------------------------
 
     async def off(self):
         logger.debug("Actor %s OFF" % self.id)
-        self.state = False
         await self.start_request("aus")
-
+        self.state = False
+        
     #Funktion get_state--------------------------------------------------------------------------------------------
 
     def get_state(self):
@@ -164,10 +164,13 @@ class ILCActor(CBPiActor):
                     self.state = False
                     logger.info("Read from SPS {}".format(self.stat_actor))
                     logger.info("Status self.state: {}".format(self.state))
+                    await self.cbpi.actor.actor_update(self.id, self.state)
                 else:
                     self.state = True
                     logger.info("Read from SPS {}".format(self.stat_actor))
                     logger.info("Status self.state: {}".format(self.state))
+                    await self.cbpi.actor.actor_update(self.id, self.state)
+     
                 await asyncio.sleep(5)
             else:
                 await asyncio.sleep(1)
