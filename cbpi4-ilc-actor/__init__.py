@@ -18,6 +18,7 @@ logger = logging.getLogger(__name__)
                   default_value="CBPI4.ILC_Actor"),
     Property.Text(label="Read Variable", configurable=True, description="Read Variable in SPS",
                   default_value="CBPI4.ILC_Actor"),
+    Property.Select(label="ActorType",options=["Taster","Schalter"],description="Select type for actor"),
     Property.Number(label="Request Timeout", configurable=True,
                     description="HTTP request timeout in seconds (default 5)", default_value=5),
     Property.Select(label="Continuous Mode", options=['YES', 'NO'],
@@ -70,6 +71,7 @@ class ILCActor(CBPiActor):
         self.request_session.timeout = float(self.props.get("Request Timeout", 5))
         self.req_type = "read"
         self.stat_actor =""
+        self.actor_type = self.props.get("ActorType","Taster")
         
         pass
 
@@ -116,19 +118,25 @@ class ILCActor(CBPiActor):
     async def on(self, power=0):
         logger.debug("Actor %s ON" % self.id)
         self.state = True
-        await self.start_request("ein")
-        await asyncio.sleep(0.5)
-        await self.start_request("aus")
+        if self.actor_type == "Taster":
+            await self.start_request("ein")
+            await asyncio.sleep(0.5)
+            await self.start_request("aus")
+        else:
+            await self.start_request("ein")
         
     #Funktion off--------------------------------------------------------------------------------------------------
 
     async def off(self):
         logger.debug("Actor %s OFF" % self.id)
         self.state = False
-        await self.start_request("ein")
-        await asyncio.sleep(0.5)
-        await self.start_request("aus")
-        
+        if self.actor_type == "Taster":
+            await self.start_request("ein")
+            await asyncio.sleep(0.5)
+            await self.start_request("aus")
+        else:
+            await self.start_request("aus")
+            
     #Funktion get_state--------------------------------------------------------------------------------------------
 
     def get_state(self):
